@@ -66,4 +66,5 @@ def detect_with_api(text, api_key):
 # ------------------------------
 # INPUTS
 # ------------------------------
-input_text = st.text_area("Paste
+input_text = st.text_area("Paste text to analyze", height=300)
+
