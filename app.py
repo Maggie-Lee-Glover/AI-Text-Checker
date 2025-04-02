@@ -53,7 +53,7 @@ def compare_to_sample(user_text, sample_text):
 
 def detect_with_api(text, api_key):
     try:
-        url = "https://api.gptzero.me/v2/predict"  # Replace if using another API
+        url = "https://api.gptzero.me/v2/predict"  # Update this URL if needed
         headers = {"Authorization": f"Bearer {api_key}"}
         response = requests.post(url, json={"document": text}, headers=headers)
         if response.status_code == 200:
@@ -67,7 +67,14 @@ def detect_with_api(text, api_key):
 # INPUTS
 # ------------------------------
 input_text = st.text_area("Paste text to analyze", height=300)
-st.write("")  # Just adds spacing
+
+st.markdown("---")
+st.subheader("🎭 Style Comparison (Optional)")
+sample_text = st.text_area("Paste reference text to compare writing style", height=200)
+
+# ------------------------------
+# ANALYSIS
+# ------------------------------
 if st.button("Analyze Text"):
     if input_text.strip() == "":
         st.warning("Please paste some text to analyze.")
@@ -81,33 +88,16 @@ if st.button("Analyze Text"):
         overall_score = textstat.flesch_reading_ease(input_text)
         st.write(f"Flesch Reading Ease: **{round(overall_score, 2)}**")
 
-# Calculate overall humanness score
-scores = [calculate_humanness(s) for s in split_sentences(input_text)]
-if scores:
-    average_score = round(sum(scores) / len(scores), 2)
-    st.subheader("🧠 Overall Humanness Score")
-    st.write(f"**{average_score}%** chance this text was written by a human.")
+        scores = [calculate_humanness(s) for s in split_sentences(input_text)]
+        if scores:
+            average_score = round(sum(scores) / len(scores), 2)
+            emoji = "🟢" if average_score > 75 else "🟡" if average_score > 50 else "🔴"
+            st.subheader("🧠 Overall Humanness Score")
+            st.write(f"{emoji} **{average_score}%** chance this text was written by a human.")
 
-# Optional style comparison
-if sample_text.strip():
-    style_score = compare_to_sample(input_text, sample_text)
-    st.subheader("🎯 Style Similarity Score")
-    st.write(f"The input text is **{style_score}%** similar in writing style to the reference.")
-else:
-    st.info("Paste a reference text above to compare writing styles.")
-
-
-        # Optional: API check (uncomment if API key is available)
-        # st.subheader("🤖 AI Detection (via API)")
-        # api_key = st.text_input("Enter GPTZero API Key")
-        # if api_key:
-        #     ai_score = detect_with_api(input_text, api_key)
-        #     if ai_score is not None:
-        #         st.success(f"AI Likelihood Score: {ai_score}%")
-        #     else:
-        #         st.error("Failed to retrieve score from API.")
-
-st.markdown("---")
-st.subheader("🎭 Style Comparison (Optional)")
-
-sample_text = st.text_area("Paste reference text to compare writing style", height=200)
+        if sample_text.strip():
+            style_score = compare_to_sample(input_text, sample_text)
+            st.subheader("🎯 Style Similarity Score")
+            st.write(f"The input text is **{style_score}%** similar in writing style to the reference.")
+        else:
+            st.info("Paste a reference text above to compare writing styles.")
