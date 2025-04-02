@@ -71,6 +71,13 @@ input_text = st.text_area("Paste text to analyze", height=300)
 st.markdown("---")
 st.subheader("🎭 Style Comparison (Optional)")
 sample_text = st.text_area("Paste reference text to compare writing style", height=200)
+@st.cache_data
+def load_default_sample():
+    with open("The Leap_ How to Transition and Thrive in Product Management from Marketing and Operations.txt", "r", encoding="utf-8") as f:
+        return f.read()
+
+sample_text = st.text_area("Paste reference text to compare writing style", value=load_default_sample(), height=200)
+
 
 # ------------------------------
 # ANALYSIS
