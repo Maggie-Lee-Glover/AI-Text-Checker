@@ -81,6 +81,14 @@ if st.button("Analyze Text"):
         overall_score = textstat.flesch_reading_ease(input_text)
         st.write(f"Flesch Reading Ease: **{round(overall_score, 2)}**")
 
+# Calculate overall humanness score
+scores = [calculate_humanness(s) for s in split_sentences(input_text)]
+if scores:
+    average_score = round(sum(scores) / len(scores), 2)
+    st.subheader("🧠 Overall Humanness Score")
+    st.write(f"**{average_score}%** chance this text was written by a human.")
+
+
         # Optional: API check (uncomment if API key is available)
         # st.subheader("🤖 AI Detection (via API)")
         # api_key = st.text_input("Enter GPTZero API Key")
