@@ -67,4 +67,27 @@ def detect_with_api(text, api_key):
 # INPUTS
 # ------------------------------
 input_text = st.text_area("Paste text to analyze", height=300)
+st.write("")  # Just adds spacing
+if st.button("Analyze Text"):
+    if input_text.strip() == "":
+        st.warning("Please paste some text to analyze.")
+    else:
+        st.subheader("🔍 Sentence-by-Sentence Analysis")
+        highlighted = highlight_sentences(input_text)
+        for sentence, status in highlighted:
+            st.markdown(f"{status} {sentence}")
+
+        st.subheader("📏 Overall Readability Score")
+        overall_score = textstat.flesch_reading_ease(input_text)
+        st.write(f"Flesch Reading Ease: **{round(overall_score, 2)}**")
+
+        # Optional: API check (uncomment if API key is available)
+        # st.subheader("🤖 AI Detection (via API)")
+        # api_key = st.text_input("Enter GPTZero API Key")
+        # if api_key:
+        #     ai_score = detect_with_api(input_text, api_key)
+        #     if ai_score is not None:
+        #         st.success(f"AI Likelihood Score: {ai_score}%")
+        #     else:
+        #         st.error("Failed to retrieve score from API.")
 
