@@ -88,6 +88,14 @@ if scores:
     st.subheader("🧠 Overall Humanness Score")
     st.write(f"**{average_score}%** chance this text was written by a human.")
 
+# Optional style comparison
+if sample_text.strip():
+    style_score = compare_to_sample(input_text, sample_text)
+    st.subheader("🎯 Style Similarity Score")
+    st.write(f"The input text is **{style_score}%** similar in writing style to the reference.")
+else:
+    st.info("Paste a reference text above to compare writing styles.")
+
 
         # Optional: API check (uncomment if API key is available)
         # st.subheader("🤖 AI Detection (via API)")
@@ -99,3 +107,7 @@ if scores:
         #     else:
         #         st.error("Failed to retrieve score from API.")
 
+st.markdown("---")
+st.subheader("🎭 Style Comparison (Optional)")
+
+sample_text = st.text_area("Paste reference text to compare writing style", height=200)
